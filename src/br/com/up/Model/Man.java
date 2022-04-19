@@ -22,4 +22,5 @@ public class Man {
 
         return stringBuilder.toString();
     }
+
 }
