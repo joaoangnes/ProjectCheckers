@@ -15,9 +15,10 @@ public class Main {
         
         // Roda o jogo
         // Necessita:
-        // 	-Validações de qual o jogador está jogando
-        // 	-Validações de jogadas em geral.
+        // 	-Validaï¿½ï¿½es de qual o jogador estï¿½ jogando
+        // 	-Validaï¿½ï¿½es de jogadas em geral.
         gameController.runGame();
+        // comentario para testar o git
     }
 }
 
