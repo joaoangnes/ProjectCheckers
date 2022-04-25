@@ -5,7 +5,7 @@ import br.com.up.Model.Player;
 import br.com.up.View.BoardView;
 
 public class GameController {
-	private Board board; // Tabuleiro
+	private Board board; //Tabuleiro
 	
     public void newGame() {
         Player player1 = new Player(1);
