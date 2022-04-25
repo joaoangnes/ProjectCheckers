@@ -14,18 +14,38 @@ public class BoardView {
     }
 
     public void printBoard() {
-    	System.out.println("");
+    	int i = 1, j = 1, verifica = 0;
+    	System.out.println("    1   2   3   4   5   6   7   8");
+    	System.out.println("   -------------------------------");
         for (Man[] line : this.board.manTable) {
             for (Man man : line) {
+            	if(verifica == 0) {
                 if (man != null) {
-                    System.out.print(" | " + man.toString());
+                    System.out.print(i + " | " + man.toString());
                 } else {
-                    System.out.print(" |   ");
+                    System.out.print(i + " |  ");
                 }
+                verifica = 1;
+            	}else {
+            		if (man != null) {
+                        System.out.print(" | " + man.toString());
+                    } else {
+                        System.out.print(" |  ");
+                    }
+            	}
+            	if(j == 8) {
+                	System.out.print(" |");
+                	j = 0;
+                }
+            	j++;
             }
+            
             System.out.println("");
+            i++;
+            
+            verifica = 0;
         }
-        System.out.println("");
+        System.out.println("   -------------------------------");
     }
     
     public void askPlayInformation(int numPlayer) {
@@ -36,8 +56,13 @@ public class BoardView {
     	int linPlay = 0, colPlay  = 0; // Coordenada da jogada a ser efetuada
     	int chosenValidator = 0, playValidator = 0; // Aux Validadores
     	
-    	System.out.println("===================");
-    	System.out.println("Jogador "+ numPlayer + ":" ); // Jogador que está na vez de efetuar a jogada
+    	System.out.println("");
+    	System.out.println("==================================");
+    	if(numPlayer == 1) {
+    		System.out.println("Jogador "+ numPlayer + " (X):" ); // Jogador que está na vez de efetuar a jogada
+    	}else if(numPlayer == 2) {
+    		System.out.println("Jogador "+ numPlayer + " (O):" );
+    	}
     
     	// Até o jogador escolher uma peça valida, ele irá pedir para informar novamente
     	while(chosenValidator!=1) {
@@ -48,22 +73,26 @@ public class BoardView {
 	    	
 	    	// Verificação se é possivel escolher a peça escolhida pelo jogador
 	    	chosenValidator = boardController.chosenManValidator(linMan, colMan, numPlayer);
-    	}
-    	
-    	// Até o jogador escolher uma jogada valida, ele irá pedir para informar novamente;
-    	while(playValidator!=1) {
-    		System.out.print("Informe a linha do local da jogada a ser realizada: ");
-        	linPlay = scanner.nextInt();
-        	System.out.print ("Informe a coluna do local da jogada a ser realizada: ");  
-        	colPlay = scanner.nextInt();
-        	
-        	if(numPlayer == 1) {
-        		playValidator = boardController.validatePlayPlayer1(linMan, colMan, linPlay, colPlay);
-        	} else {
-        		playValidator = boardController.validatePlayPlayer2(linMan, colMan, linPlay, colPlay);
-        	}
-        	
-    	}
+	    	
+	    	// Até o jogador escolher uma jogada valida, ele irá pedir para informar novamente;
+	    	while(playValidator!=1) {
+	    		System.out.print("Informe a linha do local da jogada a ser realizada: ");
+	        	linPlay = scanner.nextInt();
+	        	System.out.print ("Informe a coluna do local da jogada a ser realizada: ");  
+	        	colPlay = scanner.nextInt();
+	        	
+	        	if(numPlayer == 1) {
+	        		playValidator = boardController.validatePlayPlayer1(linMan, colMan, linPlay, colPlay);
+	        	} else {
+	        		playValidator = boardController.validatePlayPlayer2(linMan, colMan, linPlay, colPlay);
+	        	}
+	        	if(playValidator == 0) {
+	        		chosenValidator = 0;
+	        		break;
+	        	}
+	    	}
+	    	
+    	}    	
     	
     	System.out.println("===================");
     	// Caso passe de todas as validações chama a função para efetuar a jogada
