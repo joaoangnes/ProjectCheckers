@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class BoardController {
     private int size;
-    public Board board;
+    private Board board;
     private Player player1;
     private Player player2;
 
@@ -30,15 +30,15 @@ public class BoardController {
     // Valida se é possivel escolher a peça informada
     public boolean IsPiecePlayable(int coordinateX, int coordinateY, Player player) {
     	// Armazena a peça escolhida pelo jogador
-		Coordinate Coordinate = this.board.table[coordinateX][coordinateY];
+		Coordinate Coordinate = this.board.getTable()[coordinateX][coordinateY];
 
     	// Faz a validação se a peça escolhida pertence ao seu conjunto de peças ou se é um campo vazio
-		if(Coordinate.piece == null) {
+		if(Coordinate.getPiece() == null) {
 			return false;
     	}
 
 		MovementController movementController;
-		if (Coordinate.piece.isKing) {
+		if (Coordinate.getPiece().isKing()) {
 			movementController = new KingMovementController(this.board, player);
 		} else {
 			movementController = new ManMovementController(this.board, player);
@@ -48,10 +48,10 @@ public class BoardController {
     }
 
 	public boolean IsValidPlay(int fromCoordinateX, int fromCoordinateY, int toCoordinateX, int toCoordinateY, Player player) {
-		Coordinate fromCoordinate = this.board.table[fromCoordinateX][fromCoordinateY];
+		Coordinate fromCoordinate = this.board.getTable()[fromCoordinateX][fromCoordinateY];
 
 		MovementController movementController;
-		if (fromCoordinate.piece.isKing) {
+		if (fromCoordinate.getPiece().isKing()) {
 			movementController = new KingMovementController(this.board, player);
 		} else {
 			movementController = new ManMovementController(this.board, player);
@@ -59,7 +59,7 @@ public class BoardController {
 		ArrayList<Coordinate> possibleCoordinates = movementController.possibleCoordinateToGo(fromCoordinate);
 
 		for (Coordinate possibleToCoordinate : possibleCoordinates) {
-			if (possibleToCoordinate.x == toCoordinateX && possibleToCoordinate.y == toCoordinateY) {
+			if (possibleToCoordinate.getX() == toCoordinateX && possibleToCoordinate.getY() == toCoordinateY) {
 				return true;
 			}
 		}
@@ -70,11 +70,11 @@ public class BoardController {
     // Parametros: Coordenada da peça e coordenada do local da jogada 
 	public void movePiece(int fromCoordinateX, int fromCoordinateY, int toCoordinateX, int toCoordinateY) {
     	// Armazena a peça escolhida pelo jogador
-    	Coordinate from = this.board.table[fromCoordinateX - 1][fromCoordinateY - 1];
-		Coordinate to = this.board.table[toCoordinateX - 1][toCoordinateY - 1];
+    	Coordinate from = this.board.getTable()[fromCoordinateX - 1][fromCoordinateY - 1];
+		Coordinate to = this.board.getTable()[toCoordinateX - 1][toCoordinateY - 1];
 
-		to.piece = from.piece; // Muda a peça para o local escolhido
-		from.piece = null; // Deixa vazio a casa da peça escolhida
+		to.setPiece(from.getPiece()); // Muda a peça para o local escolhido
+		from.setPiece(null); // Deixa vazio a casa da peça escolhida
     }
 
     private void fillBoard() {
@@ -87,7 +87,7 @@ public class BoardController {
 	private void putCoordinate() {
 		for (int i = 0; i < this.size; i++) {
 			for (int j = 0; j < this.size; j++) {
-				this.board.table[i][j] = new Coordinate(i, j);
+				this.board.getTable()[i][j] = new Coordinate(i, j);
 			}
 		}
 	}
@@ -99,8 +99,8 @@ public class BoardController {
                 boolean pairColumn = (j % 2 == 0);
 
                 if ((pairLine && !pairColumn) || (!pairLine && pairColumn)) {
-                    Coordinate coordinate = this.board.table[i][j];
-					coordinate.piece = new Man(this.player2);
+                    Coordinate coordinate = this.board.getTable()[i][j];
+					coordinate.setPiece(new Man(this.player2));
                 }
             }
         }
@@ -113,8 +113,8 @@ public class BoardController {
                 boolean pairColumn = (j % 2 == 0);
 
                 if ((pairLine && !pairColumn) || (!pairLine && pairColumn)) {
-					Coordinate coordinate = this.board.table[i][j];
-					coordinate.piece = new Man(this.player1);
+					Coordinate coordinate = this.board.getTable()[i][j];
+					coordinate.setPiece(new Man(this.player1));
                 }
             }
         }
@@ -123,4 +123,14 @@ public class BoardController {
 	public boolean isGameFinished() {
 		return false;
 	}
+
+	public Board getBoard() {
+		return board;
+	}
+
+	public void setBoard(Board board) {
+		this.board = board;
+	}
+	
+	
 }

@@ -1,8 +1,8 @@
 package br.com.up.Model;
 
 public abstract class Piece {
-    public Player player;
-    public boolean isKing;
+    private Player player;
+    private boolean isKing;
 
     public Piece(Player player) {
         this.player = player;
@@ -10,6 +10,24 @@ public abstract class Piece {
 
     @Override
     public String toString() {
-        return this.player.symbol;
+        return this.player.getSymbol();
     }
+
+	public Player getPlayer() {
+		return player;
+	}
+
+	public void setPlayer(Player player) {
+		this.player = player;
+	}
+
+	public boolean isKing() {
+		return isKing;
+	}
+
+	public void setKing(boolean isKing) {
+		this.isKing = isKing;
+	}
+    
+    
 }

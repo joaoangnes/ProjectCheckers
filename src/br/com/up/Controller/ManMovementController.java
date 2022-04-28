@@ -24,7 +24,7 @@ public class ManMovementController extends MovementController {
             possibleCoordinate.add(leftCoordinate);
         }
         if (rightCoordinate != null) {
-            possibleCoordinate.add(leftCoordinate);
+            possibleCoordinate.add(rightCoordinate);
         }
 
         return possibleCoordinate;
@@ -33,58 +33,102 @@ public class ManMovementController extends MovementController {
     private Coordinate validateLeftPosition(Coordinate fromCoordinate) {
         Coordinate toCoordinate;
 
-        if (this.player.number == 1) {
-            int coordinateX = fromCoordinate.x - 1;
-            int coordinateY = fromCoordinate.y - 1;
+        if (this.player.getNumber() == 1) {
+            int coordinateX = fromCoordinate.getX() - 1;
+            int coordinateY = fromCoordinate.getY() - 1;
             if (!IsValidCoordinate(coordinateX, coordinateY)) {
                 return null;
             }
-            toCoordinate = this.board.table[coordinateX][coordinateY];
+            toCoordinate = this.board.getTable()[coordinateX][coordinateY];
+            
+            // tem inimigo
+            /*if(IsAlliedPiece(coordinateX, coordinateY)) {
+            	// se no lugar 2 esta livre
+            	coordinateX = fromCoordinate.getX() - 2;
+                coordinateY = fromCoordinate.getY() - 2;
+                if(!IsPlaceFree(coordinateX, coordinateY)) {
+                	return null;
+                }
+                toCoordinate = this.board.getTable()[coordinateX][coordinateY];
+            }*/
         } else {
-            int coordinateX = fromCoordinate.x + 1;
-            int coordinateY = fromCoordinate.y - 1;
+            int coordinateX = fromCoordinate.getX() + 1;
+            int coordinateY = fromCoordinate.getY() - 1;
             if (!IsValidCoordinate(coordinateX, coordinateY)) {
                 return null;
             }
-            toCoordinate = this.board.table[coordinateX][coordinateY];
+            toCoordinate = this.board.getTable()[coordinateX][coordinateY];
+            
+            // tem inimigo
+            /*if(IsAlliedPiece(coordinateX, coordinateY)) {
+            	// se no lugar 2 esta livre
+            	coordinateX = fromCoordinate.getX() + 2;
+                coordinateY = fromCoordinate.getY() - 2;
+                if(!IsPlaceFree(coordinateX, coordinateY)) {
+                	return null;
+                }
+                toCoordinate = this.board.getTable()[coordinateX][coordinateY];
+            }*/
         }
 
         // tem um espaço vazio
-        if (toCoordinate.piece == null) {
+        if (toCoordinate.getPiece() == null) {
             return toCoordinate;
         }
 
-        // tem inimigo
-        //   se no lugar 2 esta livre
+        
+        
         return validateLeftPosition(toCoordinate);
     }
     private Coordinate validateRightPosition(Coordinate fromCoordinate) {
         Coordinate toCoordinate;
 
-        if (this.player.number == 1) {
-            int coordinateX = fromCoordinate.x - 1;
-            int coordinateY = fromCoordinate.y + 1;
+        if (this.player.getNumber() == 1) {
+            int coordinateX = fromCoordinate.getX() - 1;
+            int coordinateY = fromCoordinate.getY() + 1;
             if (!IsValidCoordinate(coordinateX, coordinateY)) {
                 return null;
             }
-            toCoordinate = this.board.table[coordinateX][coordinateY];
+            toCoordinate = this.board.getTable()[coordinateX][coordinateY];
+            
+            // tem inimigo
+            /*if(IsAlliedPiece(coordinateX, coordinateY)) {
+            	// se no lugar 2 esta livre
+            	coordinateX = fromCoordinate.getX() - 2;
+                coordinateY = fromCoordinate.getY() + 2;
+                if(!IsPlaceFree(coordinateX, coordinateY)) {
+                	return null;
+                }
+                toCoordinate = this.board.getTable()[coordinateX][coordinateY];
+            }*/
         } else {
-            int coordinateX = fromCoordinate.x + 1;
-            int coordinateY = fromCoordinate.y + 1;
+            int coordinateX = fromCoordinate.getX() + 1;
+            int coordinateY = fromCoordinate.getY() + 1;
             if (!IsValidCoordinate(coordinateX, coordinateY)) {
                 return null;
             }
-            toCoordinate = this.board.table[coordinateX][coordinateY];
+            toCoordinate = this.board.getTable()[coordinateX][coordinateY];
+            
+            // tem inimigo
+            /*if(IsAlliedPiece(coordinateX, coordinateY)) {
+            	// se no lugar 2 esta livre
+            	coordinateX = fromCoordinate.getX() + 2;
+                coordinateY = fromCoordinate.getY() + 2;
+                if(!IsPlaceFree(coordinateX, coordinateY)) {
+                	return null;
+                }
+                toCoordinate = this.board.getTable()[coordinateX][coordinateY];
+            }*/
         }
 
         // tem um espaço vazio
-        if (toCoordinate.piece == null) {
+        if (toCoordinate.getPiece() == null) {
             return toCoordinate;
         }
 
         // tem inimigo
         //   se no lugar 2 esta livre
-        return validateLeftPosition(toCoordinate);
+        return validateRightPosition(toCoordinate);
     }
 
     private boolean IsValidCoordinate(int coordinateX, int coordinateY) {
@@ -96,18 +140,23 @@ public class ManMovementController extends MovementController {
     }
 
     private boolean IsAlliedPiece(int coordinateX, int coordinateY) {
-        Coordinate toCoordinate =  this.board.table[coordinateX][coordinateY];
-        if (toCoordinate.piece == null) {
+        Coordinate toCoordinate =  this.board.getTable()[coordinateX][coordinateY];
+        if (toCoordinate.getPiece() == null) {
             return false;
         }
-        return toCoordinate.piece.player == this.player;
+        //return toCoordinate.getPiece().getPlayer() == this.player;
+        return true;
     }
-
+    
     private boolean IsOutsideOfBoard(int coordinateX, int coordinateY) {
         if (coordinateX < 0 || coordinateX >= 8) {
             return true;
         }
+        
+        if (coordinateY < 0 || coordinateY >= 8) {
+        	return true;
+        }
 
-        return coordinateY < 0 || coordinateY >= 8;
+        return false;
     }
 }

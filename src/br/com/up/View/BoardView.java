@@ -16,18 +16,18 @@ public class BoardView {
     	int i = 1, j = 1, verifica = 0;
     	System.out.println("    1   2   3   4   5   6   7   8");
     	System.out.println("   -------------------------------");
-        for (Coordinate[] line : this.board.table) {
+        for (Coordinate[] line : this.board.getTable()) {
             for (Coordinate coordinate : line) {
             	if(verifica == 0) {
-                if (coordinate.piece != null) {
-                    System.out.print(i + " | " + coordinate.piece);
+                if (coordinate.getPiece() != null) {
+                    System.out.print(i + " | " + coordinate.getPiece());
                 } else {
                     System.out.print(i + " |  ");
                 }
                 verifica = 1;
             	}else {
-            		if (coordinate.piece != null) {
-                        System.out.print(" | " + coordinate.piece);
+            		if (coordinate.getPiece() != null) {
+                        System.out.print(" | " + coordinate.getPiece());
                     } else {
                         System.out.print(" |  ");
                     }
@@ -56,7 +56,7 @@ public class BoardView {
     	
     	System.out.println("");
     	System.out.println("==================================");
-		System.out.println("Jogador (" + player.symbol + ")");
+		System.out.println("Jogador (" + player.getSymbol() + ")");
 
     	// Até o jogador escolher uma peça valida, ele irá pedir para informar novamente
 		boolean validPlay;
@@ -81,7 +81,7 @@ public class BoardView {
 			System.out.print ("Informe a coluna do local da jogada a ser realizada: ");
 			toCoordinateY = scanner.nextInt();
 
-			validPlay = boardController.IsValidPlay(fromCoordinateX, fromCoordinateY, toCoordinateX, toCoordinateY, player);
+			validPlay = boardController.IsValidPlay(fromCoordinateX - 1, fromCoordinateY - 1, toCoordinateX - 1, toCoordinateY - 1, player);
     	} while(!validPlay);
 
 		System.out.println("===================");
