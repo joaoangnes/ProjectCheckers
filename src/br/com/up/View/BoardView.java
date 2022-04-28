@@ -3,8 +3,10 @@ package br.com.up.View;
 import java.util.Scanner;
 
 import br.com.up.Controller.BoardController;
+import br.com.up.Controller.MovementController;
 import br.com.up.Model.Board;
 import br.com.up.Model.Man;
+import br.com.up.Model.Player;
 
 public class BoardView {
     private Board board;
@@ -48,52 +50,59 @@ public class BoardView {
         System.out.println("   -------------------------------");
     }
     
-    public void askPlayInformation(int numPlayer) {
+    public void askPlayInformation(Player player) {
     	Scanner scanner = new Scanner(System.in);
     	BoardController boardController = new BoardController(this.board);
     	
     	int linMan = 0, colMan = 0; // Coordenada da peça a ser utilizada
     	int linPlay = 0, colPlay  = 0; // Coordenada da jogada a ser efetuada
-    	int chosenValidator = 0, playValidator = 0; // Aux Validadores
+    	int playValidator = 0; // Aux Validadores
+		boolean validPlay = false;
     	
     	System.out.println("");
     	System.out.println("==================================");
-    	if(numPlayer == 1) {
-    		System.out.println("Jogador "+ numPlayer + " (X):" ); // Jogador que está na vez de efetuar a jogada
-    	}else if(numPlayer == 2) {
-    		System.out.println("Jogador "+ numPlayer + " (O):" );
+    	if(player.number == 0) {
+    		System.out.println("Jogador (X)" ); // Jogador que está na vez de efetuar a jogada
+    	} else {
+    		System.out.println("Jogador (O)" );
     	}
     
     	// Até o jogador escolher uma peça valida, ele irá pedir para informar novamente
-    	while(chosenValidator!=1) {
+    	while(!validPlay) {
 	    	System.out.print("Informe a linha da peça a ser utilizada: ");
 	    	linMan = scanner.nextInt();
-	    	System.out.print ("Insira a coluna da peça a ser utilizada: ");  
+	    	System.out.print ("Informe a coluna da peça a ser utilizada: ");
 	    	colMan = scanner.nextInt();
 	    	
 	    	// Verificação se é possivel escolher a peça escolhida pelo jogador
-	    	chosenValidator = boardController.chosenManValidator(linMan, colMan, numPlayer);
-	    	
+	    	validPlay = boardController.ValidatePlay(linMan - 1, colMan - 1, player);
+
+			if (!validPlay) {
+				System.out.println("");
+				System.out.println("==PEÇA INVALIDA==");
+				System.out.println("Informe novamente");
+				System.out.println("");
+			}
+
 	    	// Até o jogador escolher uma jogada valida, ele irá pedir para informar novamente;
-	    	while(playValidator!=1) {
+	    	while(playValidator != 3 && validPlay) {
 	    		System.out.print("Informe a linha do local da jogada a ser realizada: ");
 	        	linPlay = scanner.nextInt();
-	        	System.out.print ("Informe a coluna do local da jogada a ser realizada: ");  
+	        	System.out.print ("Informe a coluna do local da jogada a ser realizada: ");
 	        	colPlay = scanner.nextInt();
-	        	
-	        	if(numPlayer == 1) {
+
+	        	if(player.number == 0) {
 	        		playValidator = boardController.validatePlayPlayer1(linMan, colMan, linPlay, colPlay);
 	        	} else {
 	        		playValidator = boardController.validatePlayPlayer2(linMan, colMan, linPlay, colPlay);
 	        	}
 	        	if(playValidator == 0) {
-	        		chosenValidator = 0;
+	        		validPlay = false;
 	        		break;
 	        	}
 	    	}
-	    	
-    	}    	
-    	
+    	}
+
     	System.out.println("===================");
     	// Caso passe de todas as validações chama a função para efetuar a jogada
     	boardController.moveMan(linMan, colMan, linPlay, colPlay); // Efetua a jogada

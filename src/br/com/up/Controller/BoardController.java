@@ -1,30 +1,27 @@
 package br.com.up.Controller;
 
 import br.com.up.Model.Board;
+import br.com.up.Model.Coordinate;
 import br.com.up.Model.Man;
 import br.com.up.Model.Player;
 
-import java.util.stream.Stream;
+import java.util.ArrayList;
 
 public class BoardController {
     private int size;
     public Board board;
     private Player player1;
     private Player player2;
-    
+
+	public BoardController() {}
 
     public BoardController(Board board) {
     	this.board = board;
-    }
-    
-    public BoardController() {
-    	
     }
 
     public Board CreateBoard(int size, Player player1, Player player2) {
         this.size = size;
         this.player1 = player1;
-        //System.out.println("player 1: " + new Man(this.player1));
         this.player2 = player2;
         this.board = new Board(size);
 
@@ -34,91 +31,57 @@ public class BoardController {
     }
     
     // Valida se é possivel escolher a peça informada
-    public int chosenManValidator(int linMan, int colMan, int numPlayer) {
+    public boolean ValidatePlay(int linMan, int colMan, Player player) {
     	// Armazena a peça escolhida pelo jogador
-    	Man man = this.board.manTable[linMan - 1][colMan - 1];
-    	
-    	String manStr = String.valueOf(man); // Converte o objeto em string
-    	String manChosenM = null; // Peça normal do jogador em questão
-    	String manChosenK = ("K" + numPlayer); // Peça dama do jogador em questão
-    	
-    	if(numPlayer == 1) {
-    		manChosenM = "X";
-    	}else if(numPlayer == 2) {
-    		manChosenM = "O";
-    	}
-    	
-    	//System.out.println("Man: " + manStr);
-    	//System.out.println("ManChosen: "+manChosen);
-    	
+    	Man man = this.board.manTable[linMan][colMan];
+
     	// Faz a validação se a peça escolhida pertence ao seu conjunto de peças ou se é um campo vazio
-    	if( (manStr.equals(manChosenM) || manStr.equals(manChosenK)) && !manStr.isEmpty()) {
-    		
-    		if(numPlayer == 1) {
-    			// Chama a função que valida se a jogada é possivel ser efetuada ou não para o jogador 1
-        		if(validatePossiblePlayPlayer1(linMan, colMan, String.valueOf(manChosenM))) {
-        			// Peça validada
-        			return 1;
-        		} else {
-        			System.out.println("");
-            		System.out.println("==PEÇA INVALIDA==");
-            		System.out.println("Informe novamente");
-            		System.out.println("");
-        			return 0;
-        		}
-    		} else {
-    			// Chama a função que valida se a jogada é possivel ser efetuada ou não para o jogador 2
-        		if(validatePossiblePlayPlayer2(linMan, colMan, String.valueOf(manChosenM))) {
-        			// Peça validada
-        			return 1;
-        		} else {
-        			System.out.println("");
-            		System.out.println("==PEÇA INVALIDA==");
-            		System.out.println("Informe novamente");
-            		System.out.println("");
-        			return 0;
-        		}
-    		}
-    		
-    	}else { // A peça escolhida não pertence ao seu conjunto de peças
-    		System.out.println("");
-    		System.out.println("==PEÇA INVALIDA==");
-    		System.out.println("Essa peça não pertence ao seu time ou Campo Vazio");
-    		System.out.println("Informe novamente");
-    		System.out.println("");
-    		return 0;
+		if(man == null) {
+			return false;
     	}
-    	
+
+		MovementController movementController;
+		if (man.king) {
+			movementController = new KingMovementController(this.board, player);
+		} else {
+			movementController = new ManMovementController(this.board, player);
+		}
+
+		return movementController.possiblePlaceToGo(linMan, colMan).length != 0;
     }
     
     // Faz a verificação se tem jogadas permitidas para a peça escolhida do Jogador 1
     public boolean validatePossiblePlayPlayer1(int linMan, int colMan, String manStr) {
-    	
+
+		// movimentos:
+		// man
+		// king
+
+
     	// Caso esteja nos limites do tabuleiro
     	if(colMan == 1) {
-    		// Verifica se as jogadas possiveis dessa peça 
-    		if(String.valueOf(this.board.manTable[linMan+2][colMan+2]).equals(manStr)) {
+    		// Verifica se as jogadas possiveis dessa peça
+    		if(String.valueOf(this.board.manTable[linMan+1][colMan+1]).equals(manStr)) {
 				return false; // Caso só tenha peças do seu time para você atacar, retorna como jogada invalida
-			}else { 
+			}else {
 				return true; // Caso tenha ao menos um campo permitido para avançar retorna true
 			}
     	} else if(colMan == 8){ // Caso esteja nos limites do tabuleiro
-    		// Verifica se as jogadas possiveis dessa peça 
+    		// Verifica se as jogadas possiveis dessa peça
     		if( String.valueOf(this.board.manTable[linMan+2][colMan-2]).equals(manStr)) {
 				return false; // Caso só tenha peças do seu time para você atacar, retorna como jogada invalida
 			}else {
 				return true; // Caso tenha ao menos um campo permitido para avançar retorna tru
 			}
     	} else {
-    		// Verifica se as jogadas possiveis dessa peça 
-    		if( String.valueOf(this.board.manTable[linMan+2][colMan]).equals(manStr) 
+    		// Verifica se as jogadas possiveis dessa peça
+    		if( String.valueOf(this.board.manTable[linMan+2][colMan]).equals(manStr)
 			 && String.valueOf(this.board.manTable[linMan+2][colMan+2]).equals(manStr)) {
 				return false; // Caso só tenha peças do seu time para você atacar, retorna como jogada invalida
 			}else {
 				return true; // Caso tenha ao menos um campo permitido para avançar retorna true
 			}
     	}
-    	
     }
 
 	// Faz a verificação se tem jogadas permitidas para a peça escolhida do Jogador 2
@@ -327,5 +290,7 @@ public class BoardController {
         }
     }
 
-
+	public boolean isGameFinished() {
+		return false;
+	}
 }

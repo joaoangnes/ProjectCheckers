@@ -13,11 +13,6 @@ public class Man {
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder(100);
 
-        //if (this.king) {
-        //    stringBuilder.append("K");
-        //} else {
-        //    stringBuilder.append("M");
-        //}
         if(this.player.number == 1) {
         	stringBuilder.append("X");
         }else if(this.player.number == 2) {
