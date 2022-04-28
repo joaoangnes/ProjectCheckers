@@ -40,17 +40,6 @@ public class ManMovementController extends MovementController {
                 return null;
             }
             toCoordinate = this.board.getTable()[coordinateX][coordinateY];
-            
-            // tem inimigo
-            /*if(IsAlliedPiece(coordinateX, coordinateY)) {
-            	// se no lugar 2 esta livre
-            	coordinateX = fromCoordinate.getX() - 2;
-                coordinateY = fromCoordinate.getY() - 2;
-                if(!IsPlaceFree(coordinateX, coordinateY)) {
-                	return null;
-                }
-                toCoordinate = this.board.getTable()[coordinateX][coordinateY];
-            }*/
         } else {
             int coordinateX = fromCoordinate.getX() + 1;
             int coordinateY = fromCoordinate.getY() - 1;
@@ -58,17 +47,6 @@ public class ManMovementController extends MovementController {
                 return null;
             }
             toCoordinate = this.board.getTable()[coordinateX][coordinateY];
-            
-            // tem inimigo
-            /*if(IsAlliedPiece(coordinateX, coordinateY)) {
-            	// se no lugar 2 esta livre
-            	coordinateX = fromCoordinate.getX() + 2;
-                coordinateY = fromCoordinate.getY() - 2;
-                if(!IsPlaceFree(coordinateX, coordinateY)) {
-                	return null;
-                }
-                toCoordinate = this.board.getTable()[coordinateX][coordinateY];
-            }*/
         }
 
         // tem um espaço vazio
@@ -76,8 +54,6 @@ public class ManMovementController extends MovementController {
             return toCoordinate;
         }
 
-        
-        
         return validateLeftPosition(toCoordinate);
     }
     private Coordinate validateRightPosition(Coordinate fromCoordinate) {
@@ -90,17 +66,6 @@ public class ManMovementController extends MovementController {
                 return null;
             }
             toCoordinate = this.board.getTable()[coordinateX][coordinateY];
-            
-            // tem inimigo
-            /*if(IsAlliedPiece(coordinateX, coordinateY)) {
-            	// se no lugar 2 esta livre
-            	coordinateX = fromCoordinate.getX() - 2;
-                coordinateY = fromCoordinate.getY() + 2;
-                if(!IsPlaceFree(coordinateX, coordinateY)) {
-                	return null;
-                }
-                toCoordinate = this.board.getTable()[coordinateX][coordinateY];
-            }*/
         } else {
             int coordinateX = fromCoordinate.getX() + 1;
             int coordinateY = fromCoordinate.getY() + 1;
@@ -109,17 +74,6 @@ public class ManMovementController extends MovementController {
                 return null;
             }
             toCoordinate = this.board.getTable()[coordinateX][coordinateY];
-            
-            // tem inimigo
-            /*if(IsAlliedPiece(coordinateX, coordinateY)) {
-            	// se no lugar 2 esta livre
-            	coordinateX = fromCoordinate.getX() + 2;
-                coordinateY = fromCoordinate.getY() + 2;
-                if(!IsPlaceFree(coordinateX, coordinateY)) {
-                	return null;
-                }
-                toCoordinate = this.board.getTable()[coordinateX][coordinateY];
-            }*/
         }
 
         // tem um espaço vazio

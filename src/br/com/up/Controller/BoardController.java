@@ -74,6 +74,36 @@ public class BoardController {
     	Coordinate from = this.board.getTable()[fromCoordinateX - 1][fromCoordinateY - 1];
 		Coordinate to = this.board.getTable()[toCoordinateX - 1][toCoordinateY - 1];
 
+		boolean isKillerPlay = (Math.abs(from.getX() - to.getX()) == 2);
+		if (isKillerPlay) {
+			boolean toRight = (to.getY() - from.getY()) > 0;
+			boolean toTop = (from.getX() - to.getX()) > 0;
+			
+			int killCoordinateX = 0; 
+			int killCoordinateY = 0;
+			if (toTop && toRight) {
+				killCoordinateX = from.getX() - 1;
+				killCoordinateY = from.getY() + 1;
+			}
+			
+			if (toTop && !toRight) {
+				killCoordinateX = from.getX() - 1;
+				killCoordinateY = from.getY() - 1;	
+			}
+			
+			if (!toTop && toRight) {
+				killCoordinateX = from.getX() + 1;
+				killCoordinateY = from.getY() + 1;	
+			}
+			
+			if (!toTop && !toRight) {
+				killCoordinateX = from.getX() + 1;
+				killCoordinateY = from.getY() - 1;	
+			}
+			
+			this.board.getTable()[killCoordinateX][killCoordinateY].setPiece(null);
+		}
+			
 		to.setPiece(from.getPiece()); // Muda a peça para o local escolhido
 		from.setPiece(null); // Deixa vazio a casa da peça escolhida
     }
