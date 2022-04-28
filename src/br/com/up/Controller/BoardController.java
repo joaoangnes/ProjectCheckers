@@ -1,9 +1,6 @@
 package br.com.up.Controller;
 
-import br.com.up.Model.Board;
-import br.com.up.Model.Coordinate;
-import br.com.up.Model.Man;
-import br.com.up.Model.Player;
+import br.com.up.Model.*;
 
 import java.util.ArrayList;
 
@@ -31,260 +28,93 @@ public class BoardController {
     }
     
     // Valida se é possivel escolher a peça informada
-    public boolean ValidatePlay(int linMan, int colMan, Player player) {
+    public boolean IsPiecePlayable(int coordinateX, int coordinateY, Player player) {
     	// Armazena a peça escolhida pelo jogador
-    	Man man = this.board.manTable[linMan][colMan];
+		Coordinate Coordinate = this.board.table[coordinateX][coordinateY];
 
     	// Faz a validação se a peça escolhida pertence ao seu conjunto de peças ou se é um campo vazio
-		if(man == null) {
+		if(Coordinate.piece == null) {
 			return false;
     	}
 
 		MovementController movementController;
-		if (man.king) {
+		if (Coordinate.piece.isKing) {
 			movementController = new KingMovementController(this.board, player);
 		} else {
 			movementController = new ManMovementController(this.board, player);
 		}
 
-		return movementController.possiblePlaceToGo(linMan, colMan).length != 0;
-    }
-    
-    // Faz a verificação se tem jogadas permitidas para a peça escolhida do Jogador 1
-    public boolean validatePossiblePlayPlayer1(int linMan, int colMan, String manStr) {
-
-		// movimentos:
-		// man
-		// king
-
-
-    	// Caso esteja nos limites do tabuleiro
-    	if(colMan == 1) {
-    		// Verifica se as jogadas possiveis dessa peça
-    		if(String.valueOf(this.board.manTable[linMan+1][colMan+1]).equals(manStr)) {
-				return false; // Caso só tenha peças do seu time para você atacar, retorna como jogada invalida
-			}else {
-				return true; // Caso tenha ao menos um campo permitido para avançar retorna true
-			}
-    	} else if(colMan == 8){ // Caso esteja nos limites do tabuleiro
-    		// Verifica se as jogadas possiveis dessa peça
-    		if( String.valueOf(this.board.manTable[linMan+2][colMan-2]).equals(manStr)) {
-				return false; // Caso só tenha peças do seu time para você atacar, retorna como jogada invalida
-			}else {
-				return true; // Caso tenha ao menos um campo permitido para avançar retorna tru
-			}
-    	} else {
-    		// Verifica se as jogadas possiveis dessa peça
-    		if( String.valueOf(this.board.manTable[linMan+2][colMan]).equals(manStr)
-			 && String.valueOf(this.board.manTable[linMan+2][colMan+2]).equals(manStr)) {
-				return false; // Caso só tenha peças do seu time para você atacar, retorna como jogada invalida
-			}else {
-				return true; // Caso tenha ao menos um campo permitido para avançar retorna true
-			}
-    	}
+		return movementController.possibleCoordinateToGo(Coordinate).size() != 0;
     }
 
-	// Faz a verificação se tem jogadas permitidas para a peça escolhida do Jogador 2
-    public boolean validatePossiblePlayPlayer2(int linMan, int colMan, String manStr) {
-    	
-    	// Caso esteja nos limites do tabuleiro
-    	if(colMan == 1) {
-    		// Verifica se as jogadas possiveis dessa peça 
-    		if(String.valueOf(this.board.manTable[linMan-2][colMan+2]).equals(manStr)) {
-				return false; // Caso só tenha peças do seu time para você atacar, retorna como jogada invalida
-			}else { 
-				return true; // Caso tenha ao menos um campo permitido para avançar retorna true
+	public boolean IsValidPlay(int fromCoordinateX, int fromCoordinateY, int toCoordinateX, int toCoordinateY, Player player) {
+		Coordinate fromCoordinate = this.board.table[fromCoordinateX][fromCoordinateY];
+
+		MovementController movementController;
+		if (fromCoordinate.piece.isKing) {
+			movementController = new KingMovementController(this.board, player);
+		} else {
+			movementController = new ManMovementController(this.board, player);
+		}
+		ArrayList<Coordinate> possibleCoordinates = movementController.possibleCoordinateToGo(fromCoordinate);
+
+		for (Coordinate possibleToCoordinate : possibleCoordinates) {
+			if (possibleToCoordinate.x == toCoordinateX && possibleToCoordinate.y == toCoordinateY) {
+				return true;
 			}
-    	} else if(colMan == 8){ // Caso esteja nos limites do tabuleiro
-    		// Verifica se as jogadas possiveis dessa peça 
-    		if( String.valueOf(this.board.manTable[linMan-2][colMan-2]).equals(manStr)) {
-				return false; // Caso só tenha peças do seu time para você atacar, retorna como jogada invalida
-			}else {
-				return true; // Caso tenha ao menos um campo permitido para avançar retorna true
-			}
-    	} else {
-    		// Verifica se as jogadas possiveis dessa peça 
-    		if( String.valueOf(this.board.manTable[linMan-2][colMan]).equals(manStr) 
-			 && String.valueOf(this.board.manTable[linMan-2][colMan-2]).equals(manStr)) {
-				return false; // Caso só tenha peças do seu time para você atacar, retorna como jogada invalida
-			}else {
-				return true; // Caso tenha ao menos um campo permitido para avançar retorna true
-			}
-    	}
-    	
-    }
-    
-    // Valida a jogada do Jogador 1
-    public int validatePlayPlayer1(int linMan, int colMan, int linPlay, int colPlay) {
-    	// Caso esteja nos limites do tabuleiro
-    	if(colMan == 1) { // Caso ele esteja na extremidade esquerda ele tem apenas uma jogada permitida, caso não for dama
-    		if(linMan+1 == linPlay && colMan+1 == colPlay) { // Valida se a jogada possivel é a escolhida
-    			//verifica se posicao nao esta ocupada
-    			if(this.board.manTable[linPlay - 1][colPlay - 1] == null) {
-    				return 1; // Jogada Valida
-    			}else {    				
-    				System.out.println("");
-            		System.out.println("==JOGADA INVALIDA==");
-            		System.out.println("Informe novamente");
-            		System.out.println("");
-        			return 0; // Jogada invalida
-    			}
-    		}else {
-    			System.out.println("");
-        		System.out.println("==JOGADA INVALIDA==");
-        		System.out.println("Informe novamente");
-        		System.out.println("");
-    			return 0; // Jogada invalida
-    		}
-    	} else if(colMan == 8){ // Caso ele esteja na extremidade direita ele tem apenas uma jogada permitida, caso não for dama
-    		if(linMan+1 == linPlay && colMan-1 == colPlay) { // Valida se a jogada possivel é a escolhida
-    			//verifica se posicao nao esta ocupada
-    			if(this.board.manTable[linPlay - 1][colPlay - 1] == null) {
-    				return 1; // Jogada Valida
-    			}else {    				
-    				System.out.println("");
-            		System.out.println("==JOGADA INVALIDA==");
-            		System.out.println("Informe novamente");
-            		System.out.println("");
-        			return 0; // Jogada invalida
-    			}
-    		}else {
-    			System.out.println("");
-        		System.out.println("==JOGADA INVALIDA==");
-        		System.out.println("Informe novamente");
-        		System.out.println("");
-    			return 0; // Jogada invalida
-    		}
-    	} else { // Caso não for um caso de extremidade
-    		// Verifica se o jogador está efetuando uma das duas possiveis jogadas
-    		if( (linMan+1 == linPlay && colMan+1 == colPlay) || (linMan+1 == linPlay && colMan-1 == colPlay) ) {
-    			//verifica se posicao nao esta ocupada
-    			if(this.board.manTable[linPlay - 1][colPlay - 1] == null) {
-    				return 1; // Jogada Valida
-    			}else {    				
-    				System.out.println("");
-            		System.out.println("==JOGADA INVALIDA==");
-            		System.out.println("Informe novamente");
-            		System.out.println("");
-        			return 0; // Jogada invalida
-    			}
-    		}else {
-    			System.out.println("");
-        		System.out.println("==JOGADA INVALIDA==");
-        		System.out.println("Informe novamente");
-        		System.out.println("");
-    			return 0; // Jogada Invalida
-    		}
-    	}
-    }
-    
-    // Valida a jogada do Jogador 2
-    public int validatePlayPlayer2(int linMan, int colMan, int linPlay, int colPlay) {
-    	// Caso esteja nos limites do tabuleiro
-    	if(colMan == 1) { // Caso ele esteja na extremidade esquerda ele tem apenas uma jogada permitida, caso não for dama
-    		if(linMan-1 == linPlay && colMan+1 == colPlay) { // Valida se a jogada possivel é a escolhida
-    			//verifica se posicao nao esta ocupada
-    			if(this.board.manTable[linPlay - 1][colPlay - 1] == null) {
-    				return 1; // Jogada Valida
-    			}else {    				
-    				System.out.println("");
-            		System.out.println("==JOGADA INVALIDA==");
-            		System.out.println("Informe novamente");
-            		System.out.println("");
-        			return 0; // Jogada invalida
-    			}
-    		}else {
-    			System.out.println("");
-        		System.out.println("==JOGADA INVALIDA==");
-        		System.out.println("Informe novamente");
-        		System.out.println("");
-    			return 0; // Jogada invalida
-    		}
-    	} else if(colMan == 8){ // Caso ele esteja na extremidade direita ele tem apenas uma jogada permitida, caso não for dama
-    		if(linMan-1 == linPlay && colMan-1 == colPlay) { // Valida se a jogada possivel é a escolhida
-    			//verifica se posicao nao esta ocupada
-    			if(this.board.manTable[linPlay - 1][colPlay - 1] == null) {
-    				return 1; // Jogada Valida
-    			}else {    				
-    				System.out.println("");
-            		System.out.println("==JOGADA INVALIDA==");
-            		System.out.println("Informe novamente");
-            		System.out.println("");
-        			return 0; // Jogada invalida
-    			}
-    		}else {
-    			System.out.println("");
-        		System.out.println("==JOGADA INVALIDA==");
-        		System.out.println("Informe novamente");
-        		System.out.println("");
-    			return 0; // Jogada invalida
-    		}
-    	} else { // Caso não for um caso de extremidade
-    		// Verifica se o jogador está efetuando uma das duas possiveis jogadas
-    		if( (linMan-1 == linPlay && colMan+1 == colPlay) || (linMan-1 == linPlay && colMan-1 == colPlay) ) {
-    			//verifica se posicao nao esta ocupada
-    			if(this.board.manTable[linPlay - 1][colPlay - 1] == null) {
-    				return 1; // Jogada Valida
-    			}else {    				
-    				System.out.println("");
-            		System.out.println("==JOGADA INVALIDA==");
-            		System.out.println("Informe novamente");
-            		System.out.println("");
-        			return 0; // Jogada invalida
-    			}
-    		}else {
-    			System.out.println("");
-        		System.out.println("==JOGADA INVALIDA==");
-        		System.out.println("Informe novamente");
-        		System.out.println("");
-    			return 0; // JOgada Invalida
-    		}
-    	}
-    }
-    
+		}
+
+		return false;
+	}
+
     // Parametros: Coordenada da peça e coordenada do local da jogada 
-	public void moveMan(int linMan, int colMan, int linPlay ,int colPlay) {
+	public void movePiece(int fromCoordinateX, int fromCoordinateY, int toCoordinateX, int toCoordinateY) {
     	// Armazena a peça escolhida pelo jogador
-    	Man man = this.board.manTable[linMan - 1][colMan - 1];
-    	
-    	this.board.manTable[linMan - 1][colMan - 1] = null; // Deixa vazio a casa da peça escolhida
-    	this.board.manTable[linPlay - 1][colPlay - 1] = man; // Muda a peça para o local escolhido
+    	Coordinate from = this.board.table[fromCoordinateX - 1][fromCoordinateY - 1];
+		Coordinate to = this.board.table[toCoordinateX - 1][toCoordinateY - 1];
+
+		to.piece = from.piece; // Muda a peça para o local escolhido
+		from.piece = null; // Deixa vazio a casa da peça escolhida
     }
 
     private void fillBoard() {
+		putCoordinate();
+
         putPlayer1Man();
         putPlayer2Man();
     }
 
-    private void putPlayer1Man() {
+	private void putCoordinate() {
+		for (int i = 0; i < this.size; i++) {
+			for (int j = 0; j < this.size; j++) {
+				this.board.table[i][j] = new Coordinate(i, j);
+			}
+		}
+	}
+
+    private void putPlayer2Man() {
         for (int i = 0; i <= 2; i++) {
             for (int j = 0; j < this.size; j++) {
                 boolean pairLine = (i % 2 == 0);
                 boolean pairColumn = (j % 2 == 0);
 
-                if (pairLine && !pairColumn) {
-                    this.board.manTable[i][j] = new Man(this.player1);
-                }
-
-                if (!pairLine && pairColumn) {
-                    this.board.manTable[i][j] = new Man(this.player1);
+                if ((pairLine && !pairColumn) || (!pairLine && pairColumn)) {
+                    Coordinate coordinate = this.board.table[i][j];
+					coordinate.piece = new Man(this.player2);
                 }
             }
         }
     }
 
-    private void putPlayer2Man() {
+    private void putPlayer1Man() {
         for (int i = (this.size - 3); i < this.size; i++) {
             for (int j = 0; j < this.size; j++) {
                 boolean pairLine = (i % 2 == 0);
                 boolean pairColumn = (j % 2 == 0);
 
-                if (pairLine && !pairColumn) {
-                    this.board.manTable[i][j] = new Man(this.player2);
-                }
-
-                if (!pairLine && pairColumn) {
-                    this.board.manTable[i][j] = new Man(this.player2);
+                if ((pairLine && !pairColumn) || (!pairLine && pairColumn)) {
+					Coordinate coordinate = this.board.table[i][j];
+					coordinate.piece = new Man(this.player1);
                 }
             }
         }

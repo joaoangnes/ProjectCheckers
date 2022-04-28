@@ -1,9 +1,9 @@
 package br.com.up.Model;
 
 public class Board {
-    public Man[][] manTable;
+    public Coordinate[][] table;
 
     public Board(int size) {
-        this.manTable = new Man[size][size];
+        this.table = new Coordinate[size][size];
     }
 }
