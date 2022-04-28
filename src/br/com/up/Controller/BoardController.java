@@ -56,6 +56,7 @@ public class BoardController {
 		} else {
 			movementController = new ManMovementController(this.board, player);
 		}
+		
 		ArrayList<Coordinate> possibleCoordinates = movementController.possibleCoordinateToGo(fromCoordinate);
 
 		for (Coordinate possibleToCoordinate : possibleCoordinates) {

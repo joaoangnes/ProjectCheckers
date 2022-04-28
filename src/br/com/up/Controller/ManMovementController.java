@@ -104,6 +104,7 @@ public class ManMovementController extends MovementController {
         } else {
             int coordinateX = fromCoordinate.getX() + 1;
             int coordinateY = fromCoordinate.getY() + 1;
+            
             if (!IsValidCoordinate(coordinateX, coordinateY)) {
                 return null;
             }
@@ -144,8 +145,8 @@ public class ManMovementController extends MovementController {
         if (toCoordinate.getPiece() == null) {
             return false;
         }
-        //return toCoordinate.getPiece().getPlayer() == this.player;
-        return true;
+        return toCoordinate.getPiece().getPlayer() == this.player;
+        //return true;
     }
     
     private boolean IsOutsideOfBoard(int coordinateX, int coordinateY) {

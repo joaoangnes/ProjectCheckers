@@ -53,35 +53,47 @@ public class BoardView {
     	
     	int fromCoordinateX = 0, fromCoordinateY = 0; // Coordenada da peça a ser utilizada
     	int toCoordinateX = 0, toCoordinateY  = 0; // Coordenada da jogada a ser efetuada
+    	boolean validPlay;
+    	boolean PlayablePiece; // verifica a jogada
     	
     	System.out.println("");
     	System.out.println("==================================");
 		System.out.println("Jogador (" + player.getSymbol() + ")");
 
     	// Até o jogador escolher uma peça valida, ele irá pedir para informar novamente
-		boolean validPlay;
     	do {
-	    	System.out.print("Informe a linha da peça a ser utilizada: ");
+    		System.out.print("Informe a linha da peça a ser utilizada: ");
 	    	fromCoordinateX = scanner.nextInt();
 	    	System.out.print ("Informe a coluna da peça a ser utilizada: ");
 	    	fromCoordinateY = scanner.nextInt();
 	    	
 	    	// Verificação se é possivel escolher a peça escolhida pelo jogador
-	    	boolean PlayablePiece = boardController.IsPiecePlayable(fromCoordinateX - 1, fromCoordinateY - 1, player);
-
+	    	PlayablePiece = boardController.IsPiecePlayable(fromCoordinateX - 1, fromCoordinateY - 1, player);
+	    	
 			if (!PlayablePiece) {
 				System.out.println("");
 				System.out.println("==PEÇA INVALIDA==");
 				System.out.println("Informe novamente");
 				System.out.println("");
 			}
-
+    	} while (!PlayablePiece);
+    	
+    	// Até o jogador escolher uma jogada valida
+    	do {
 			System.out.print("Informe a linha do local da jogada a ser realizada: ");
 			toCoordinateX = scanner.nextInt();
 			System.out.print ("Informe a coluna do local da jogada a ser realizada: ");
 			toCoordinateY = scanner.nextInt();
 
 			validPlay = boardController.IsValidPlay(fromCoordinateX - 1, fromCoordinateY - 1, toCoordinateX - 1, toCoordinateY - 1, player);
+			
+			if (!validPlay) {
+				System.out.println("");
+				System.out.println("==JOGADA INVALIDA==");
+				System.out.println("Informe novamente");
+				System.out.println("");
+			}
+			
     	} while(!validPlay);
 
 		System.out.println("===================");

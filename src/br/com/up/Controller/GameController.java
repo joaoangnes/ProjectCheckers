@@ -22,13 +22,7 @@ public class GameController {
     public void runGame() {
     	BoardView boardView = new BoardView(this.board);
         BoardController boardController = new BoardController(this.board);
-
-    	// Falta:
-        //  -Substituir o 'true' pela função que verifica o fim do jogo
-    	//	-Verificações de jogadas para as damas 
-    	// 	-Verificações se a peça jogada se tornou uma dama
-    	// 	-Verificação se a peça escolhida é dama ou normal
-
+        
         do {
             boardView.printBoard();
             boardView.askPlayInformation(DefinePlayerTurn());
