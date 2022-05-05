@@ -30,8 +30,7 @@ public class GameController {
             boardView.printBoard();
             boardView.askPlayInformation(DefinePlayerTurn());
 
-
-            this.turn++;
+            NextTurn();
         } while(!boardController.isGameFinished());
     }
 
@@ -41,5 +40,9 @@ public class GameController {
         }
 
         return this.player2;
+    }
+
+    private void NextTurn() {
+        this.turn++;
     }
 }

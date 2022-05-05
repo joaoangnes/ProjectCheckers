@@ -19,12 +19,12 @@ public class BoardView {
         for (Coordinate[] line : this.board.getTable()) {
             for (Coordinate coordinate : line) {
             	if(verifica == 0) {
-                if (coordinate.getPiece() != null) {
-                    System.out.print(i + " | " + coordinate.getPiece());
-                } else {
-                    System.out.print(i + " |  ");
-                }
-                verifica = 1;
+					if (coordinate.getPiece() != null) {
+						System.out.print(i + " | " + coordinate.getPiece());
+					} else {
+						System.out.print(i + " |  ");
+					}
+					verifica = 1;
             	}else {
             		if (coordinate.getPiece() != null) {
                         System.out.print(" | " + coordinate.getPiece());
@@ -53,9 +53,8 @@ public class BoardView {
     	
     	int fromCoordinateX = 0, fromCoordinateY = 0; // Coordenada da peça a ser utilizada
     	int toCoordinateX = 0, toCoordinateY  = 0; // Coordenada da jogada a ser efetuada
-    	boolean validPlay;
     	boolean PlayablePiece; // verifica a jogada
-    	
+
 		System.out.println("\nVez do jogador (" + player.getSymbol() + ")");
 
     	// Até o jogador escolher uma peça valida, ele irá pedir para informar novamente
@@ -77,7 +76,8 @@ public class BoardView {
     	} while (!PlayablePiece);
     	
     	// Até o jogador escolher uma jogada valida
-    	do {
+		boolean validPlay;
+		do {
 			System.out.print("Informe a linha do local da jogada a ser realizada: ");
 			toCoordinateX = scanner.nextInt();
 			System.out.print ("Informe a coluna do local da jogada a ser realizada: ");
@@ -94,9 +94,9 @@ public class BoardView {
 			
     	} while(!validPlay);
 
-		System.out.println("===================");
     	// Caso passe de todas as validações chama a função para efetuar a jogada
     	boardController.movePiece(fromCoordinateX, fromCoordinateY, toCoordinateX, toCoordinateY); // Efetua a jogada
+		System.out.println("===================");
     	System.out.println("Jogada Efetuada com sucesso!!");
     	System.out.println("===================");
     }
