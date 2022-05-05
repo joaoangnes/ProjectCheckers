@@ -109,7 +109,25 @@ public class BoardController {
 
 		to.setPiece(from.getPiece()); // Muda a peça para o local escolhido
 		from.setPiece(null); // Deixa vazio a casa da peça escolhida
+		boolean transformToKing = validateTransformToKing(to);
+		transformToKing = true;
+		if (transformToKing)
+			to.getPiece().transformInKing();
     }
+
+	public boolean validateTransformToKing(Coordinate coordinate) {
+		Piece piece = coordinate.getPiece();
+		if (piece.isKing()) {
+			return false;
+		}
+		if (piece.getPlayer().getNumber() == 1 && coordinate.getX() == 7)
+			return true;
+
+		if (piece.getPlayer().getNumber() == 2 && coordinate.getX() == 0)
+			return true;
+
+		return false;
+	}
 
     private void fillBoard() {
 		putCoordinate();
