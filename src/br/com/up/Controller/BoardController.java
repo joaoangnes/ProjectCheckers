@@ -102,8 +102,11 @@ public class BoardController {
 			}
 			
 			this.board.getTable()[killCoordinateX][killCoordinateY].setPiece(null);
+
+			Piece piecePlayed = from.getPiece();
+			piecePlayed.getPlayer().points += 1;
 		}
-			
+
 		to.setPiece(from.getPiece()); // Muda a peça para o local escolhido
 		from.setPiece(null); // Deixa vazio a casa da peça escolhida
     }

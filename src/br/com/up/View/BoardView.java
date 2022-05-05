@@ -15,7 +15,7 @@ public class BoardView {
     public void printBoard() {
     	int i = 1, j = 1, verifica = 0;
     	System.out.println("    1   2   3   4   5   6   7   8");
-    	System.out.println("   -------------------------------");
+		System.out.println("   _______________________________");
         for (Coordinate[] line : this.board.getTable()) {
             for (Coordinate coordinate : line) {
             	if(verifica == 0) {
@@ -44,8 +44,8 @@ public class BoardView {
             
             verifica = 0;
         }
-        System.out.println("   -------------------------------");
-    }
+		System.out.println("   -------------------------------");
+	}
     
     public void askPlayInformation(Player player) {
     	Scanner scanner = new Scanner(System.in);
@@ -56,9 +56,7 @@ public class BoardView {
     	boolean validPlay;
     	boolean PlayablePiece; // verifica a jogada
     	
-    	System.out.println("");
-    	System.out.println("==================================");
-		System.out.println("Jogador (" + player.getSymbol() + ")");
+		System.out.println("\nVez do jogador (" + player.getSymbol() + ")");
 
     	// Até o jogador escolher uma peça valida, ele irá pedir para informar novamente
     	do {

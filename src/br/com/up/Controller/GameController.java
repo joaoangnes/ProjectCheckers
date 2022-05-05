@@ -3,6 +3,7 @@ package br.com.up.Controller;
 import br.com.up.Model.Board;
 import br.com.up.Model.Player;
 import br.com.up.View.BoardView;
+import br.com.up.View.MenuView;
 
 public class GameController {
 	private Board board; // Tabuleiro
@@ -22,10 +23,13 @@ public class GameController {
     public void runGame() {
     	BoardView boardView = new BoardView(this.board);
         BoardController boardController = new BoardController(this.board);
-        
+        MenuView menuView = new MenuView(this.player1, this.player2);
+
         do {
+            menuView.showScores();
             boardView.printBoard();
             boardView.askPlayInformation(DefinePlayerTurn());
+
 
             this.turn++;
         } while(!boardController.isGameFinished());
