@@ -110,7 +110,7 @@ public class BoardController {
 		to.setPiece(from.getPiece()); // Muda a peça para o local escolhido
 		from.setPiece(null); // Deixa vazio a casa da peça escolhida
 		boolean transformToKing = validateTransformToKing(to);
-		transformToKing = true;
+		//transformToKing = true;
 		if (transformToKing)
 			to.getPiece().transformInKing();
     }
@@ -120,10 +120,10 @@ public class BoardController {
 		if (piece.isKing()) {
 			return false;
 		}
-		if (piece.getPlayer().getNumber() == 1 && coordinate.getX() == 7)
+		if (piece.getPlayer().getNumber() == 2 && coordinate.getX() == 7)
 			return true;
 
-		if (piece.getPlayer().getNumber() == 2 && coordinate.getX() == 0)
+		if (piece.getPlayer().getNumber() == 1 && coordinate.getX() == 0)
 			return true;
 
 		return false;
